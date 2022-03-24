@@ -1,31 +1,41 @@
-// // 程式碼寫這裡
-// const API =
-//   "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+// 程式碼寫這裡
 
-// async function getUsers() {
-//   const rawData = await fetch(API)
-//   const addresses = await rawData.json()
-//   const adr = addresses.filter(function (address) {
-//     return address.ar.match(/^八德/g)
-//   })
-//   console.log(adr)
-// }
+const siteList = document.querySelector(".siteList")
 
-// getUsers()
+async function searchData(keywords) {
+  const youbikeAPI =
+    "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+  const rawData = await fetch(youbikeAPI)
+  const data = await rawData.json()
 
-// const list = ["John", "Amy", "Tim", "Albert", "Tommy"]
+  const getFilData = data.filter((filData) => filData.ar.includes(keywords))
+  getFilData.forEach((dataProperty) => {
+    let { ar: address, sna: location, sbi: num } = dataProperty
+    let getDataList = `<li class="list-group-item fs-5">
+    <i class="fas fa-bicycle"></i>
+     ${location.replace("YouBike2.0_", "")} (${num})<br>
+    <small class="text-muted">${address}</small>
+    </li>`
+    siteList.insertAdjacentHTML("beforeend", getDataList)
+  })
+}
 
-// const result = list.filter(function (x) {
-//   return x.length >= 4
-// })
+function siteListReset() {
+  siteList.innerHTML = ""
+}
 
-// console.log(result)
+function checkInput(keywords) {
+  if (keywords === "") {
+    siteListReset()
+    alert("輸入關鍵字搜尋路名，例如：八德路")
+  } else {
+    siteListReset()
+    searchData(keywords)
+  }
+}
 
-const list = [1, 2, 3, 4, 5]
-
-const result = list.filter(function (value) {
-  return value > 2
+document.querySelector("#searchForm").addEventListener("submit", function (e) {
+  const input = document.querySelector("#searchKeyword").value
+  e.preventDefault()
+  checkInput(input)
 })
-
-console.log(result) // [2, 4, 6, 8, 10]
-console.log()
