@@ -26,12 +26,11 @@ function siteListReset() {
 
 function checkInput(keywords) {
   if (keywords === "") {
-    siteListReset()
     alert("輸入關鍵字搜尋路名，例如：八德路")
   } else {
-    siteListReset()
     searchData(keywords)
   }
+  siteListReset()
 }
 
 document.querySelector("#searchForm").addEventListener("submit", function (e) {
